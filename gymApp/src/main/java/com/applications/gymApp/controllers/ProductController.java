@@ -1,13 +1,11 @@
 package com.applications.gymApp.controllers;
 
-import com.applications.gymApp.models.Product;
+import com.applications.gymApp.dao.models.Product;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import com.applications.gymApp.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
