@@ -1,37 +1,50 @@
 package com.applications.gymApp.controllers;
 
-import com.applications.gymApp.dao.models.Product;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import com.applications.gymApp.converter.ProductConverter;
+import com.applications.gymApp.dto.ProductRequest;
+import com.applications.gymApp.dto.ProductResponse;
 import com.applications.gymApp.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/shop")
 public class ProductController {
     private final ProductService productService;
 
-    @GetMapping("/")
-    public String products(Model model){
-        model.addAttribute("products", productService.listProducts());
-        return "products";
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public List<ProductResponse> getAll(){
+        return ProductConverter.toApi(productService.getAll());
     }
 
-    @GetMapping("/product/{id}")
-    public String productInfo(@PathVariable Long id, Model model) {
-        model.addAttribute("product", productService.getProductById(id));
-        return "product-info";
+    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ProductResponse getById(@PathVariable Integer id){
+        return ProductConverter.toApi(productService.getById(id));
     }
 
-    @PostMapping("/product/create")
-    public String createProduct(Product product){
-        productService.saveProduct(product);
-        return "redirect:/";
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ProductResponse create(@RequestBody ProductRequest request){
+        var created = productService.create(ProductConverter.toModel(request));
+        return ProductConverter.toApi(created);
     }
-    @PostMapping("/product/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return "redirect:/";
+
+    @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ProductResponse update(@PathVariable Integer id, @RequestBody ProductRequest request) throws Exception {
+        var updated = productService.update(id, ProductConverter.toModel(request));
+        return ProductConverter.toApi(updated);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    public void delete(@PathVariable Integer id){
+        productService.delete(id);
+    }
+
 }

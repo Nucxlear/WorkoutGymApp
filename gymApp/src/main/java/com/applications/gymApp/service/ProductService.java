@@ -1,38 +1,44 @@
 package com.applications.gymApp.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import com.applications.gymApp.dao.ProductRepository;
 import com.applications.gymApp.dao.models.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
 
-    @Transactional
-    public List<Product> getExchanges(){
+    @Transactional(readOnly = true)
+    public Collection<Product> getAll() {
         return productRepository.findAll();
     }
+
+    @Transactional(readOnly = true)
+    public Product getById(Integer id){
+        return productRepository.getReferenceById(id);
+    }
     @Transactional
-    public Product saveExchange(Product exchangeRequest){
-        return productRepository.save(exchangeRequest);
+    public Product create(Product request) {
+        return productRepository.save(request);
     }
 
     @Transactional
-    public Product updateExchange(Integer id,Product exchangeRequest) throws Exception {
+    public Product update(Integer id,Product request){
         if (productRepository.existsById(id)) {
-            exchangeRequest.setId(id);
-            return productRepository.save(exchangeRequest);
+            request.setId(id);
+            return productRepository.save(request);
         }
-        throw new Exception("Exchange with id = %s not found".formatted(id));
+        throw new EntityNotFoundException("Entity by id = %s not found".formatted(id));
     }
 
     @Transactional
-    public void deleteExchange(Integer id){
+    public void delete(Integer id){
         productRepository.deleteById(id);
     }
 
