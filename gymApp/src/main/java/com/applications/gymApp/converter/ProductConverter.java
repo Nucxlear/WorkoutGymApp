@@ -1,8 +1,8 @@
 package com.applications.gymApp.converter;
 
 import com.applications.gymApp.dao.models.Product;
-import com.applications.gymApp.dto.ProductRequest;
-import com.applications.gymApp.dto.ProductResponse;
+import com.applications.gymApp.dto.product.ProductRequest;
+import com.applications.gymApp.dto.product.ProductResponse;
 import lombok.experimental.UtilityClass;
 
 import java.util.Collection;

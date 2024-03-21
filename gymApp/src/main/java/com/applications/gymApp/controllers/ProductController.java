@@ -1,8 +1,8 @@
 package com.applications.gymApp.controllers;
 
 import com.applications.gymApp.converter.ProductConverter;
-import com.applications.gymApp.dto.ProductRequest;
-import com.applications.gymApp.dto.ProductResponse;
+import com.applications.gymApp.dto.product.ProductRequest;
+import com.applications.gymApp.dto.product.ProductResponse;
 import com.applications.gymApp.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,26 +24,26 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ProductResponse getById(@PathVariable Integer id){
+    public ProductResponse getProductById(@PathVariable Integer id){
         return ProductConverter.toApi(productService.getById(id));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ProductResponse create(@RequestBody ProductRequest request){
+    public ProductResponse createProduct(@RequestBody ProductRequest request){
         var created = productService.create(ProductConverter.toModel(request));
         return ProductConverter.toApi(created);
     }
 
     @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ProductResponse update(@PathVariable Integer id, @RequestBody ProductRequest request) throws Exception {
+    public ProductResponse updateProduct(@PathVariable Integer id, @RequestBody ProductRequest request) throws Exception {
         var updated = productService.update(id, ProductConverter.toModel(request));
         return ProductConverter.toApi(updated);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public void delete(@PathVariable Integer id){
+    public void deleteProduct(@PathVariable Integer id){
         productService.delete(id);
     }
 
