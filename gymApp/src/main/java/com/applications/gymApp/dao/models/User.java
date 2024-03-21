@@ -5,25 +5,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-
 @Getter
 @Setter
 @Accessors(chain = true)
 @Table(name = "Product")
 @Entity
-public class Product {
-
-    @Id()
+public class User {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "price", nullable = false)
-    private int price;
-
-    @Column(name = "title", nullable = false)
-    private String title;
-
-    @Column(name = "description", nullable = false)
-    private String description;
+    private Integer userId;
+    @Column(name = "userName", nullable = false)
+    private String userName;
+    @Column(name = "userStatus", nullable = false)
+    private String userStatus;
 
 }
